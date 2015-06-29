@@ -1,0 +1,57 @@
+@(message: String)
+
+@main("Welcome to Play") {
+
+    <div class="container" ng-app="MainApp" ng-controller="MainController">
+
+        <h1 class="page-header">Body parsers and file uploading <small>{{title}}</small></h1>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title"> Form </h1>
+            </div>
+            <div class="panel-body">
+
+                <form name="myform" novalidate
+                    enctype="multipart/form-data" method="post" class="form-horizontal" ng-submit="myform.$valid && submitForm(myform)">
+
+                    <div class="form-group">
+                        <label for="username" class="control-label col-sm-2 col-sm-offset-1">Username</label>
+                        <div class="col-sm-3">
+                            <input type="text" ng-model="form.data.username" class="form-control" name="username" id="username" required/> <br />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="filename" class="control-label col-sm-2 col-sm-offset-1">File</label>
+                        <div class="col-sm-3">
+                            <input type="file"
+                                file-input="files"
+                                multiple
+                                name="filename" id="filename"/>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-offset-3">
+                        <input type="submit" value="Submit" class="btn btn-default "/>
+                    </div>
+
+                    <br />
+
+                    <li ng-repeat="file in files"> {{file.name}}</li>
+
+                    <pre>
+                       is valid?  {{myform.$valid}} <br />
+                        data : {{ form.data | json }}
+                    </pre>
+
+                </form>
+            </div> @* .panel-body *@
+
+        </div> @* .panel *@
+
+
+
+</div>
+
+}
