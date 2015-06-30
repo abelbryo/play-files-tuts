@@ -19,6 +19,7 @@ angular.module("MainApp", [])
         var data = angular.copy($scope.form.data);
 
         var fd = new FormData();
+        fd.append("username", data.username);
         angular.forEach($scope.files, function(file){
             fd.append('file', file );
         });
