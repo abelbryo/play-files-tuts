@@ -18,8 +18,10 @@ angular.module("MainApp", ['ngFileUpload'])
                     fields: {'username': $scope.username},
                     file: file
                 }).progress(function(evt){
+                    console.log(evt);
                     var progressPct = parseInt(100 * evt.loaded / evt.total);
                     $scope.width = progressPct;
+                    $scope.progressFileName = evt.config.file.name;
                     console.log('progress ' + progressPct + "% " + evt.config.file.name);
                 }).success(function(data, status, headers, config){
                     console.log("file " + config.file.name + " uploaded. reponse: " , data);
