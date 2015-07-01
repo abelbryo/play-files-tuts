@@ -6,6 +6,9 @@ angular.module("MainApp", ['ngFileUpload'])
 })
 
 .controller("MySecondCtrl", function($scope, Upload){
+     $scope.$watch('files', function () {
+         $scope.upload($scope.files);
+     });
 
     $scope.list = [];
 
@@ -25,6 +28,8 @@ angular.module("MainApp", ['ngFileUpload'])
                 }).success(function(data, status, headers, config){
                     console.log("file " + config.file.name + " uploaded. reponse: " , data);
                     $scope.list.push(config.file.name);
+                }).error(function(err, status, headers, config){
+                    alert(config.file.name + " is too big :("  );
                 });
             });
         }
