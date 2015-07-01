@@ -36,10 +36,5 @@ class Application extends Controller {
 
   }
 
-  def save1 = Action(parse.temporaryFile) { request =>
-    val result = request.body.moveTo(new File("/tmp/picture"))
-    println(result)
-    Ok("File uploaded")
-  }
 
 }

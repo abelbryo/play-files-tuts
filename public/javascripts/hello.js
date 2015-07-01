@@ -2,48 +2,12 @@ angular.module("MainApp", ['ngFileUpload'])
 
 
 .controller("MainController", function($scope, $http) {
-    console.log("--- MainController Loadded ---");
-    $scope.title = "Hello Angular";
-
-    $scope.form = {
-        data: {}
-    };
-
-    $scope.filesChanged = function(elem){
-        $scope.files = elem.files;
-        $scope.$apply();
-    };
-
-    $scope.submitForm = function(form) {
-
-        var data = angular.copy($scope.form.data);
-
-        var fd = new FormData();
-        fd.append("username", data.username);
-        angular.forEach($scope.files, function(file){
-            fd.append('file', file );
-        });
-
-        $http.post('/save', fd, {
-            transformRequest: angular.identity,
-            headers: {'Content-Type': undefined}
-        }).success(function(response) {
-            console.log(response);
-        }).error(function(err) {
-            console.log(err);
-        });
-
-        $scope.form.data = '';
-        form.$setPristine();
-    };
-
 
 })
 
 .controller("MySecondCtrl", function($scope, Upload){
-    $scope.$watch('files', function(){
-        $scope.upload($scope.files);
-    });
+
+    $scope.list = [];
 
 
     $scope.upload = function(files){
@@ -59,6 +23,8 @@ angular.module("MainApp", ['ngFileUpload'])
                     console.log('progress ' + progressPct + "% " + evt.config.file.name);
                 }).success(function(data, status, headers, config){
                     console.log("file " + config.file.name + " uploaded. reponse: " , data);
+                    $scope.filename = config.file.name;
+                    $scope.list.push(config.file.name);
                 });
             });
         }
