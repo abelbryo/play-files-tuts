@@ -2,55 +2,92 @@
 
 @main("Welcome to Play") {
 
-    <div class="container" ng-app="MainApp" ng-controller="MainController">
+    <div class="container" ng-app="MainApp">
 
-        <h1 class="page-header">Body parsers and file uploading <small>{{title}}</small></h1>
+        <div ng-controller="MainController">
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h1 class="panel-title"> Form </h1>
+            <h1 class="page-header">Body parsers and file uploading <small>{{title}}</small></h1>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h1 class="panel-title"> Form </h1>
+                </div>
+                <div class="panel-body">
+
+                    <form name="myform" novalidate class="form-horizontal" ng-submit="myform.$valid && submitForm(myform)">
+
+                        <div class="form-group">
+                            <label for="username" class="control-label col-sm-2 col-sm-offset-1">Username</label>
+                            <div class="col-sm-3">
+                                <input type="text" ng-model="form.data.username" class="form-control" name="username" id="username" required/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="filename" class="control-label col-sm-2 col-sm-offset-1">File</label>
+                            <div class="col-sm-3">
+                                <input type="file"
+                                    file-input="files"
+                                    multiple
+                                    name="picture" id="filename"/>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-offset-3">
+                            <input type="submit" value="Submit" class="btn btn-default "/>
+                        </div>
+
+                        <br />
+
+                        <li ng-repeat="file in files"> {{file.name}}</li>
+
+                        <pre>
+                           is valid?  {{myform.$valid}} <br />
+                            data : {{ form.data | json }}
+                        </pre>
+
+                    </form>
+                </div> @* .panel-body *@
+
             </div>
-            <div class="panel-body">
-
-                <form name="myform" novalidate class="form-horizontal" ng-submit="myform.$valid && submitForm(myform)">
-
-                    <div class="form-group">
-                        <label for="username" class="control-label col-sm-2 col-sm-offset-1">Username</label>
-                        <div class="col-sm-3">
-                            <input type="text" ng-model="form.data.username" class="form-control" name="username" id="username" required/>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="filename" class="control-label col-sm-2 col-sm-offset-1">File</label>
-                        <div class="col-sm-3">
-                            <input type="file"
-                                file-input="files"
-                                multiple
-                                name="picture" id="filename"/>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-offset-3">
-                        <input type="submit" value="Submit" class="btn btn-default "/>
-                    </div>
-
-                    <br />
-
-                    <li ng-repeat="file in files"> {{file.name}}</li>
-
-                    <pre>
-                       is valid?  {{myform.$valid}} <br />
-                        data : {{ form.data | json }}
-                    </pre>
-
-                </form>
-            </div> @* .panel-body *@
 
         </div> @* .panel *@
 
+        <hr />
 
 
-</div>
+        <p>Using ng-file-upload </p>
+
+        <div ng-controller="MySecondCtrl">
+            <form name="mysecondform" novalidate class="form-horizontal" ng-submit="mysecondform.$valid && submitForm(mysecondform)">
+
+                <div class="form-group">
+                    <label for="filename" class="control-label col-sm-2 col-sm-offset-1">File</label>
+                    <div class="col-sm-3">
+                        <div class="button btn btn-default" ngf-multiple="true" ngf-select ngf-change="upload($files)">Upload on file change</div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-sm-offset-3">
+                    <div class="progress progress-striped" ng-show="width > 0">
+                        <div class="progress-bar" style="width:{{width}}%"> </div>
+                    </div>
+                </div>
+
+                @*
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        Image thumbnail: <img ngf-src="files[0]" ngf-default-src="'/thumb.jpg'" ngf-accept="'image/*'">
+                        Audio preview: <audio controls ngf-src="files[0]" ngf-accept="'audio/*'"></audio>
+                        Video preview: <video controls ngf-src="files[0]" ngf-accept="'video/*'"></video>
+                    </div>
+                </div>
+                *@
+
+            </form>
+        </div>
+
+
+    </div>
 
 }
