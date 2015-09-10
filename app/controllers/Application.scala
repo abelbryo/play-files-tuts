@@ -13,44 +13,59 @@ import play.api.libs.functional.syntax._
 class Application extends Controller {
 
   sealed trait ExtraInfo
-
   case class Contact(email: String, phoneNumber: String) extends ExtraInfo
+
+  object ExtraInfo {
+    implicit val ExtraInfoWrites: Writes[ExtraInfo] = {
+      new Writes[ExtraInfo] {
+        def writes(obj: ExtraInfo) = {
+          obj match {
+            case c: Contact => Contact.contactWrites.writes(c)
+          }
+        }
+      }
+    }
+
+  }
+
   object Contact {
-    // implicit val contactFormat = Json.format[Contact]
     implicit val contactReads: Reads[Contact] = (
       (JsPath \ "email").read[String] and
-      (JsPath \ "phoneNumber").read[String]
+      (JsPath \ "phone_number").read[String]
     )(Contact.apply _)
 
     implicit val contactWrites: Writes[Contact] = (
       (JsPath \ "email").write[String] and
-      (JsPath \ "phoneNumber").write[String]
+      (JsPath \ "phone_number").write[String]
     )(unlift(Contact.unapply))
   }
 
   case class Person(name: String, age: Int, extraInfo: ExtraInfo)
   object Person {
 
+    private def isEmail(str: String) = true // fake test
+
     implicit object ExtraInfoReadFormat extends Reads[ExtraInfo] {
       def reads(js: JsValue) = {
-        val e = (js \ "email").as[String]
-        val p = (js \ "phoneNumber").as[String]
-        Contact(e, p) match {
-          case c: Contact => Json.fromJson[Contact](js)
+        (js \ "email").as[String] match {
+          case c if isEmail(c) => Json.fromJson[Contact](js)
         }
       }
     }
 
-    implicit object ExtraInfoWriteFormat extends Writes[ExtraInfo] {
-      def writes(obj: ExtraInfo) = {
-        obj match {
-          case c: Contact => Json.obj("email" -> c.email, "phoneNumber" -> c.phoneNumber)
-        }
-      }
-    }
+    implicit val personReads: Reads[Person] = (
+      (JsPath \ "name").read[String] and
+      (JsPath \ "age").read[Int] and
+      (JsPath \ "extra_info").read[ExtraInfo]
+    )(Person.apply _)
 
-    implicit val personFormat = Json.format[Person]
+    implicit val personWrites: Writes[Person] = (
+      (JsPath \ "email").write[String] and
+      (JsPath \ "age").write[Int] and
+      (JsPath \ "extra_info").write[ExtraInfo]
+    )(unlift(Person.unapply))
 
+    // implicit val personFormat = Json.format[Person]
   }
 
   def index = Action { request =>
