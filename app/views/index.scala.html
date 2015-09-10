@@ -2,55 +2,75 @@
 
 @main("Welcome to Play") {
 
-    <div class="container" ng-app="MainApp" ng-controller="MainController">
+    <div class="container" ng-app="MainApp">
 
-        <h1 class="page-header">Body parsers and file uploading <small>{{title}}</small></h1>
+        <style type="text/css" media="all">
+            .drop-box {
+                background: #F8F8F8;
+                border: 5px dashed #DDD;
+                width: 200px;
+                height: 65px;
+                text-align: center;
+                padding: 10px;
+            }
+            .dragover {
+                border: 5px dashed blue;
+            }
+        </style>
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h1 class="panel-title"> Form </h1>
-            </div>
-            <div class="panel-body">
 
-                <form name="myform" novalidate class="form-horizontal" ng-submit="myform.$valid && submitForm(myform)">
+        <h3 class="page-header">Using ng-file-upload </h3>
 
-                    <div class="form-group">
-                        <label for="username" class="control-label col-sm-2 col-sm-offset-1">Username</label>
-                        <div class="col-sm-3">
-                            <input type="text" ng-model="form.data.username" class="form-control" name="username" id="username" required/>
+        <div ng-controller="MySecondCtrl">
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="button btn btn-default" ngf-multiple="true" ngf-select ngf-change="upload($files)">Upload on file change</div>
+                    </div>
+
+                    <div class="col-sm-6">
+                         <div ngf-drop ngf-select ng-model="files" class="drop-box"
+                              ngf-drag-over-class="dragover" ngf-multiple="true" ngf-allow-dir="true"
+                              accept="image/*,application/pdf,plain/txt">Drop pdfs or images here or click to upload</div>
+                         <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-3" ng-show="width > 0">
+                        <span class="glyphicon glyphicon-upload"> </span> {{progressFileName}}
+                        <div class="progress progress-striped" >
+                            <div class="progress-bar" role="progressbar"
+                                aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{{width}}%">{{width}}%</div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading"> <h1 class="panel-title">Completed</h1></div>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <tr ng-repeat="file in list">
+                                        <td>{{file}}</td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="form-group">
-                        <label for="filename" class="control-label col-sm-2 col-sm-offset-1">File</label>
-                        <div class="col-sm-3">
-                            <input type="file"
-                                file-input="files"
-                                multiple
-                                name="picture" id="filename"/>
-                        </div>
+
+                @*
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        Image thumbnail: <img ngf-src="files[0]" ngf-default-src="'/thumb.jpg'" ngf-accept="'image/*'">
+                        Audio preview: <audio controls ngf-src="files[0]" ngf-accept="'audio/*'"></audio>
+                        Video preview: <video controls ngf-src="files[0]" ngf-accept="'video/*'"></video>
                     </div>
+                </div>
+                *@
 
-                    <div class="col-sm-offset-3">
-                        <input type="submit" value="Submit" class="btn btn-default "/>
-                    </div>
-
-                    <br />
-
-                    <li ng-repeat="file in files"> {{file.name}}</li>
-
-                    <pre>
-                       is valid?  {{myform.$valid}} <br />
-                        data : {{ form.data | json }}
-                    </pre>
-
-                </form>
-            </div> @* .panel-body *@
-
-        </div> @* .panel *@
+        </div>
 
 
-
-</div>
+    </div>
 
 }
